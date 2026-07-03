@@ -96,4 +96,6 @@ package-lock.json
 ## Apple stuff
 .AppleDouble/
 
+# Secrets / token store (contains refresh + access tokens)
 credentials.json
+tokens.json*
