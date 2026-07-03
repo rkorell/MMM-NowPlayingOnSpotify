@@ -40,7 +40,11 @@ Add this exact **Redirect URI**:
 http://127.0.0.1:8888/callback
 ```
 
-Spotify only accepts `http` for **loopback** addresses (`127.0.0.1`). A LAN IP or hostname over `http` is rejected at runtime as *insecure*, and `localhost` is not allowed either. The port (`8888`) is the port the module's authorization server listens on — if you change it, change it consistently in the redirect URI and `config.js`.
+> ⚠️ **This is effectively the only value that works — take it literally.**
+>
+> Spotify accepts `http` redirect URIs *only* for the loopback address `127.0.0.1`. Watch out for the trap: a LAN IP or hostname over `http` may be **accepted in the dashboard yet rejected at the actual redirect** as *insecure* — and `localhost` is not allowed at all (it must be the numeric `127.0.0.1`).
+>
+> In practice the only part you might ever change is the **port** (`8888`), and then only consistently in both the redirect URI and `config.js`. The single real alternative would be an `https://` URI with a valid certificate — which on a headless mirror means running a reverse proxy plus certificate management, wildly disproportionate for a twice-a-year login. So for all practical purposes: use `http://127.0.0.1:8888/callback`.
 
 ## Step 2 – Configure the module
 
@@ -93,7 +97,7 @@ So despite the naming — *access* sounds primary, *refresh* sounds like a mere 
 |--------|-------------|
 | `clientID` | **REQUIRED** string – the Client ID of your Spotify app. |
 | `clientSecret` | **REQUIRED** string – the Client Secret of your Spotify app. |
-| `redirectURI` | **REQUIRED** string – a redirect URI whitelisted in your Spotify app (see Step 1). Determines the authorization server's port. |
+| `redirectURI` | **REQUIRED** string – the redirect URI whitelisted in your Spotify app, and the port the local auth server listens on. In practice this is fixed to `http://127.0.0.1:8888/callback` (loopback only — see the callout in Step 1); the **port** is the only part you would realistically change. |
 | `showCoverArt` | Optional boolean – show the album cover. Default `true`. |
 | `updatesEvery` | Optional integer – display update interval in seconds. Default `1`. Lower is more responsive; higher relieves the Raspberry Pi. |
 
