@@ -113,6 +113,16 @@ So despite the naming — *access* sounds primary, *refresh* sounds like a mere 
 | `showCoverArt` | Optional boolean – show the album cover. Default `true`. |
 | `updatesEvery` | Optional integer – display update interval in seconds. Default `1`. Lower is more responsive; higher relieves the Raspberry Pi. |
 
+## Customizing the appearance
+
+Override the module's styles in MagicMirror's `css/custom.css` (this survives updates — don't edit the module's own `css/styles.css`). For example, the album cover fills the module width by default (`100%`), which can be quite large:
+
+```css
+.NPOS_albumCover {
+  width: 50%;
+}
+```
+
 ## Updating
 
 ```bash
