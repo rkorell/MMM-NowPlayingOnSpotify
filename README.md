@@ -2,7 +2,7 @@
 
 A module for the [MagicMirror²](https://github.com/MagicMirrorOrg/MagicMirror) project displaying the song currently playing on Spotify.
 
-This is a maintained fork of [raywo/MMM-NowPlayingOnSpotify](https://github.com/raywo/MMM-NowPlayingOnSpotify) (MIT). It adds handling for Spotify's refresh-token expiry (effective 20 July 2026), a self-managed token store, and an integrated re-authorization flow — so a dead token no longer silently blanks the display.
+This is my fork of [raywo/MMM-NowPlayingOnSpotify](https://github.com/raywo/MMM-NowPlayingOnSpotify) (MIT). I added handling for Spotify's refresh-token expiry (effective 20 July 2026), a self-managed token store, and an integrated re-authorization flow — so a dead token no longer silently blanks the display.
 
 ## What it does
 
@@ -13,6 +13,16 @@ Since 20 July 2026 Spotify expires user refresh tokens after **6 months**. When 
 - detects the `invalid_grant` error, stops hammering the API, and shows a clear **red re-authorization banner** on the mirror (instead of pretending nothing is playing);
 - warns **proactively** (about two weeks before the hard expiry) with a smaller banner above the cover art, showing the same re-authorization URL so you can renew early — the music keeps playing;
 - lets you re-authorize from any computer via a short SSH tunnel — no config editing, no token copy-paste, and the mirror recovers automatically without a restart.
+
+## Screenshot
+
+![A song playing, with cover art](img/readme/NowPlayingOnSpotify.png)
+
+> **Note on the "nothing playing" logo:** when nothing is playing, the module shows a logo instead of cover art. I replaced the Spotify logo with a **Volumio** logo; the original Spotify logo is kept as `img/Spotify_Logo_RGB_White_original.png`. To switch back to the Spotify logo:
+>
+> ```bash
+> cp img/Spotify_Logo_RGB_White_original.png img/Spotify_Logo_RGB_White.png
+> ```
 
 ## Preconditions
 
@@ -66,11 +76,13 @@ You no longer paste tokens into `config.js`. Tokens are obtained in Step 3 and s
 
 **Migration from v1.x:** if your `config.js` still contains `accessToken` and `refreshToken`, they are picked up once and moved into the token store automatically. After the first successful run you **should remove** `accessToken` and `refreshToken` from `config.js` — only `clientID`, `clientSecret` and `redirectURI` need to stay.
 
-## Step 3 – Authorize (once) and re-authorize (every 6 months)
+## Step 3 – Authorize (first time) and re-authorize (every 6 months)
 
-Both use the same flow. Because the redirect URI is a loopback address, the browser doing the login must reach the mirror's `127.0.0.1:8888` — bridge it from another computer with a one-line SSH tunnel:
+**On a fresh install there are no tokens yet, so the module starts directly in the authorization state and shows the red banner right away — that is the normal first-time setup, not an error.** Renewal after the 6-month expiry uses the exact same steps.
 
-1. When authorization is needed, the mirror shows a red banner.
+Because the redirect URI is a loopback address, the browser doing the login must reach the mirror's `127.0.0.1:8888` — bridge it from another computer with a one-line SSH tunnel:
+
+1. When authorization is needed (first run, or after expiry), the mirror shows a red banner.
 2. On your computer, open an SSH tunnel to the mirror and keep it open:
    ```
    ssh -L 8888:127.0.0.1:8888 pi@<mirror-ip>
@@ -105,10 +117,10 @@ So despite the naming — *access* sounds primary, *refresh* sounds like a mere 
 
 ```bash
 cd ~/MagicMirror/modules/MMM-NowPlayingOnSpotify
-rm -rf node_modules
 git pull
-npm install
 ```
+
+This module has no dependencies, so there is nothing to `npm install`.
 
 ## Localization
 
@@ -116,6 +128,6 @@ The re-authorization and warning texts follow MagicMirror's `language` setting. 
 
 ## Credits
 
+I forked raywo's original module; my changes are described above.
+
 - Original module: [raywo](https://github.com/raywo) — [MMM-NowPlayingOnSpotify](https://github.com/raywo/MMM-NowPlayingOnSpotify) (MIT).
-- Fork maintained by [Dr. Ralf Korell](https://github.com/rkorell).
-- [Michael Teeuw](https://github.com/MichMich) for the MagicMirror project.
