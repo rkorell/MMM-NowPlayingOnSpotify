@@ -14,9 +14,10 @@
  *
  * The redirect URI must match the value whitelisted in the Spotify app
  * dashboard. Spotify accepts http only for numeric IP literals, so a LAN IP
- * such as http://172.23.56.157:8888/callback enables re-auth from a laptop.
+ * such as http://192.0.2.10:8888/callback enables re-auth from a laptop.
  *
  * # Modified: [2026-07-03 11:19] - RKORELL: new file (integrated auth/reauth server)
+ * # Modified: [2026-07-27 11:00] - RKORELL: genericize LAN IP example in comment (docs IP)
  * # Modified: [2026-07-03 12:31] - RKORELL: bind to loopback (127.0.0.1) only
  */
 
